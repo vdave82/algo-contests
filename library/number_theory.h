@@ -48,3 +48,12 @@ IntType egcd(IntType a, IntType b, IntType* px, IntType* py) {
     *py = last_y;
     return a;
 }
+
+// Returns a ^ (-1) modulo n, assuming gcd(a, n) == 1.
+template<typename IntType>
+IntType modulo_inverse(IntType a, IntType n) {
+    IntType x, y;
+    IntType g = egcd(a, n, &x, &y);
+    if (g != 1) return 0;
+    return x;
+}
