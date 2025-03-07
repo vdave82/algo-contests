@@ -57,3 +57,39 @@ IntType modulo_inverse(IntType a, IntType n) {
     if (g != 1) return 0;
     return x;
 }
+
+// Solves a system of congruences using the Chinese Remainder Theorem.
+template <typename IntType>
+IntType chinese_remainder_theorem(const std::vector<std::pair<IntType, IntType>>& remainders_and_moduli) {
+    IntType product = 1;
+    IntType solution = 0;
+
+    std::vector<IntType> moduli;
+    for (const auto& pair : remainders_and_moduli) {
+        moduli.push_back(pair.second);
+    }
+    std::vector<IntType> remainders;
+    for (const auto& pair : remainders_and_moduli) {
+        remainders.push_back(pair.first);
+    }
+    if (remainders.size() != moduli.size()) return 0;
+    
+    std::vector<IntType> inverses;
+    std::vector<IntType> partial_products;
+
+    for (size_t i = 0; i < moduli.size(); ++i) {
+        product *= moduli[i];
+        partial_products.push_back(product / moduli[i]);
+    }
+
+    for (size_t i = 0; i < moduli.size(); ++i) {
+        IntType inv = modulo_inverse(partial_products[i], moduli[i]);
+        if (inv == 0) return 0;
+        inverses.push_back(inv);
+    }
+
+    for (size_t i = 0; i < remainders.size(); ++i) {
+        solution += remainders[i] * inverses[i] * partial_products[i];
+    }
+    return solution % product;
+}
