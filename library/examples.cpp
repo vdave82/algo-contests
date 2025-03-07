@@ -1,6 +1,8 @@
 #include <cstdint>
 #include <iostream>
 #include <string>
+#include <vector>
+#include <cassert>
 
 #include "number_theory.h"
 
@@ -17,8 +19,25 @@ void NumberTheory() {
     cout << "GCD = " << g << " = " << x << " * " << a << " + " << y << " * " << b << " = " << x * a + y * b << endl;
 }
 
+void TestChineseRemainderTheorem() {
+    vector<pair<int64_t, int64_t>> congruences;
+
+    congruences.push_back({2, 3});
+    congruences.push_back({3, 5});
+    assert(chinese_remainder_theorem(congruences) == 8);
+    congruences.clear();
+    congruences.push_back({2, 4});
+    congruences.push_back({4, 6});
+    assert(chinese_remainder_theorem(congruences) == 10);
+    congruences.clear();
+    congruences.push_back({1, 3});
+    assert(chinese_remainder_theorem(congruences) == 1);
+    congruences.clear();
+}
+
 int main(int argc, char* argv[]) {
     NumberTheory();
+    TestChineseRemainderTheorem();
 
     return 0;
 }
